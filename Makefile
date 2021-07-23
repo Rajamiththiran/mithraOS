@@ -9,11 +9,11 @@
     all: kernel.elf
 
     kernel.elf: $(OBJECTS)
-        ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
+	ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
 
-    os.iso: kernel.elf
-        cp kernel.elf iso/boot/kernel.elf
-        genisoimage -R                              \
+    mithraOS.iso: kernel.elf
+	cp kernel.elf iso/boot/kernel.elf
+	genisoimage -R                              \
                     -b boot/grub/stage2_eltorito    \
                     -no-emul-boot                   \
                     -boot-load-size 4               \
@@ -24,14 +24,14 @@
                     -o mithraOS.iso                       \
                     iso
 
-    run: os.iso
-        bochs -f bochsrc.txt -q
+    run: mithraOS.iso
+	bochs -f bochsrc.txt -q
 
     %.o: %.c
-        $(CC) $(CFLAGS)  $< -o $@
+	$(CC) $(CFLAGS)  $< -o $@
 
     %.o: %.s
-        $(AS) $(ASFLAGS) $< -o $@
+	$(AS) $(ASFLAGS) $< -o $@
 
     clean:
-        rm -rf *.o kernel.elf mithraOS.iso
+	rm -rf *.o kernel.elf mithraOS.iso
